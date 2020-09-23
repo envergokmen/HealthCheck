@@ -13,7 +13,7 @@ namespace HealthCheck.Web
 {
     public class ApplicationBackgroundService : IHostedService, IDisposable
     {
-        private readonly HealthCheckService _healthCheckService;
+        public readonly HealthCheckService _healthCheckService;
         private Timer _timer;
 
         public ApplicationBackgroundService()
@@ -21,25 +21,33 @@ namespace HealthCheck.Web
             _healthCheckService = new HealthCheckService(new Database.HealthContext());
         }
 
-        public void DispatchQueue(object state = null)
+        public async void DispatchQueue(object state = null)
         {
              var queueToProcess = _healthCheckService.GetOneToCheck();
-             ProcessQueueItem(queueToProcess);
+             await ProcessQueueItem(queueToProcess);
         }
 
         private async Task ProcessQueueItem(UpdateTargetAppDto item)
         {
-             if (item == null) return;
-        
+            if (item == null) return;
+
             Debug.WriteLine($"Processing {item.Id}  -  {item.Name} url : {item.Url}");
 
-            var httpClient = new HttpClient();
-
-            var response = await httpClient.GetAsync("https://www.chalkartproject.com/");
-            var _isAlive = response.StatusCode == System.Net.HttpStatusCode.OK ? true : false;
+           var isAlive = await CheckIsAlive(item.Url);
 
             //to do check from http request.
-            _healthCheckService.MarkAsChecked(new UpdateChecksStatusDto { CheckDate=DateTime.Now, IsAlive= _isAlive, Id=item.Id });
+            _healthCheckService.MarkAsChecked(new UpdateChecksStatusDto { CheckDate = DateTime.Now, IsAlive = isAlive, Id = item.Id });
+
+        }
+
+        private static async Task<bool> CheckIsAlive(string url)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5);
+                var response = await httpClient.GetAsync(url);
+                return response.StatusCode == System.Net.HttpStatusCode.OK ? true : false;
+            }
 
         }
 
