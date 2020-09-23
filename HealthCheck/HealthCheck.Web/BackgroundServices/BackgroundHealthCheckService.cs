@@ -11,12 +11,12 @@ using Microsoft.Extensions.Hosting;
 
 namespace HealthCheck.Web
 {
-    public class ApplicationBackgroundService : IHostedService, IDisposable
+    public class BackgroundHealthCheckService : IHostedService, IDisposable
     {
         public readonly HealthCheckService _healthCheckService;
         private Timer _timer;
 
-        public ApplicationBackgroundService()
+        public BackgroundHealthCheckService()
         {
             _healthCheckService = new HealthCheckService(new Database.HealthContext());
         }

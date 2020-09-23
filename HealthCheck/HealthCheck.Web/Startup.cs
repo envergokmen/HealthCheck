@@ -35,8 +35,8 @@ namespace HealthCheck.Web
             services.AddTransient<MembershipService, MembershipService>();
             services.AddTransient<HealthCheckService, HealthCheckService>();
 
-            services.AddSingleton<ApplicationBackgroundService, ApplicationBackgroundService>();
-            services.AddHostedService<ApplicationBackgroundService>();
+            services.AddSingleton<BackgroundHealthCheckService, BackgroundHealthCheckService>();
+            services.AddHostedService<BackgroundHealthCheckService>();
 
         }
 
