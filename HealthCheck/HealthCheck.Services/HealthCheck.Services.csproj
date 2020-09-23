@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HealthCheck.Database\HealthCheck.Database.csproj" />
+    <ProjectReference Include="..\HealthCheck.Models\HealthCheck.Models.csproj" />
+  </ItemGroup>
+
+</Project>

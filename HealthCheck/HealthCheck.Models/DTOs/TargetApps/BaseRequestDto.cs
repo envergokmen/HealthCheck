@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HealthCheck.Models.DTOs.TargetApps
+{
+    public abstract class BaseRequestDto
+    {
+        public int? LoggedInUserId { get; set; }
+
+    }
+}
