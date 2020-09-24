@@ -33,7 +33,7 @@ namespace HealthCheck.Models
         Minutes = 1,
         Hours = 2,
         Days = 3,
-        Month = 4,
+        Months = 4,
         Years = 4
     }
 }

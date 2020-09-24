@@ -17,6 +17,13 @@ namespace HealthCheck.Models
         [StringLength(60)]
         public string Username { get; set; }
 
+        [StringLength(90)]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [StringLength(20)]
+        public string Gsm { get; set; }
+
         [StringLength(30)]
         public string Password { get; set; }
 

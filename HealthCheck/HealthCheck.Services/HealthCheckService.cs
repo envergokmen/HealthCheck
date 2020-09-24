@@ -24,7 +24,7 @@ namespace HealthCheck.Services
 
         public UpdateTargetAppDto GetOne(GetOneTargetAppDto request)
         {
-            return db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId && c.Id == request.Id).Select(app => new UpdateTargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name }).FirstOrDefault();
+            return db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId && c.Id == request.Id).Select(app => new UpdateTargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, IntervalType=app.IntervalType, IntervalValue=app.IntervalValue }).FirstOrDefault();
         }
 
         public UpdateTargetAppDto GetOneToCheck()
@@ -34,7 +34,7 @@ namespace HealthCheck.Services
 
         public TargetAppDto Add(CreateTargetAppDto registerDto)
         {
-            var app = new TargetApp { Name = registerDto.Name, Url= registerDto.Url, CreatedById= registerDto.LoggedInUserId };
+            var app = new TargetApp { Name = registerDto.Name, Url= registerDto.Url, CreatedById= registerDto.LoggedInUserId, IntervalValue= registerDto.IntervalValue, IntervalType=registerDto.IntervalType };
             db.TargetApps.Add(app);
             db.SaveChanges();
 
@@ -47,6 +47,8 @@ namespace HealthCheck.Services
 
             app.Name = registerDto.Name;
             app.Url = registerDto.Url;
+            app.IntervalType = registerDto.IntervalType;
+            app.IntervalValue = registerDto.IntervalValue;
 
             db.SaveChanges();
 

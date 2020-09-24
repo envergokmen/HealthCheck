@@ -24,9 +24,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="Url" class="control-label"></label>
-                <input asp-for="Url" class="form-control"  placeholder="Url" />
+                <input asp-for="Url" class="form-control" placeholder="Url" />
                 <span asp-validation-for="Url" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="IntervalType" class="control-label"></label>
+                <input asp-for="IntervalType" class="form-control" placeholder="IntervalType" />
+                <span asp-validation-for="IntervalType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="IntervalValue" class="control-label"></label>
+                <input asp-for="IntervalValue" class="form-control" placeholder="IntervalType" />
+                <span asp-validation-for="IntervalValue" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

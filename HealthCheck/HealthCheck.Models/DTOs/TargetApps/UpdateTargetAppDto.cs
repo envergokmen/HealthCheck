@@ -15,5 +15,8 @@ namespace HealthCheck.Models.DTOs.TargetApps
         [StringLength(500)]
         public string Url { get; set; }
 
+        public IntervalType IntervalType { get; set; }
+        public int IntervalValue { get; set; }
+
     }
 }
