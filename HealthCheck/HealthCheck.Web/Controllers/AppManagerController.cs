@@ -10,6 +10,7 @@ using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Services;
 using HealthCheck.Web.Membership;
 using HealthCheck.Models.DTOs.ViewModels;
+using HealthCheck.Web.Extensions;
 
 namespace HealthCheck.Web.Controllers
 {
@@ -42,7 +43,30 @@ namespace HealthCheck.Web.Controllers
                 model.Apps = _healthCheckService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
             }
 
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView(model);
+            }
+
             return View(model);
+        }
+
+        public IActionResult GetStatuses()
+        {
+            var user = _userService.GetUser();
+            if (user == null) return RedirectToAction("Login", "User");
+
+            ViewBag.User = user;
+
+            AppManagerIndexVM model = new AppManagerIndexVM(user);
+
+            if (user != null)
+            {
+                model.Apps = _healthCheckService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
+            }
+
+            return PartialView("Index", model);
+
         }
 
         public IActionResult Create()
@@ -73,7 +97,13 @@ namespace HealthCheck.Web.Controllers
             if (user == null) return RedirectToAction("Login", "User");
             ViewBag.User = user;
 
-            _healthCheckService.Delete(new DeleteTargetAppDto { Id = Id, LoggedInUserId=user.Id });
+            _healthCheckService.Delete(new DeleteTargetAppDto { Id = Id, LoggedInUserId = user.Id });
+
+            if (Request.IsAjaxRequest())
+            {
+                return Content("true");
+            }
+
             return RedirectToAction("Index");
 
         }
@@ -84,7 +114,7 @@ namespace HealthCheck.Web.Controllers
             if (user == null) return RedirectToAction("Login", "User");
             ViewBag.User = user;
 
-            var model = _healthCheckService.GetOne(new GetOneTargetAppDto { Id = Id, LoggedInUserId=user.Id });
+            var model = _healthCheckService.GetOne(new GetOneTargetAppDto { Id = Id, LoggedInUserId = user.Id });
             return View(model);
         }
 

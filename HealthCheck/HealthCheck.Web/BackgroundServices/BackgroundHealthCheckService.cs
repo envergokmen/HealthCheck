@@ -33,10 +33,8 @@ namespace HealthCheck.Web
 
             Debug.WriteLine($"Processing {item.Id}  -  {item.Name} url : {item.Url}");
 
-           var isAlive = await CheckIsAlive(item.Url);
-
-            //to do check from http request.
-            _healthCheckService.MarkAsChecked(new UpdateChecksStatusDto { CheckDate = DateTime.Now, IsAlive = isAlive, Id = item.Id });
+           //var isAlive = await CheckIsAlive(item.Url);
+            //_healthCheckService.MarkAsChecked(new UpdateChecksStatusDto { CheckDate = DateTime.Now, IsAlive = isAlive, Id = item.Id });
 
         }
 

@@ -19,7 +19,7 @@ namespace HealthCheck.Services
 
         public List<TargetAppDto> All(GetTargetAllAppDto request)
         {
-            return db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, IsAlive=app.IsAlive, LastCheck= app.LastCheck }).ToList();
+            return db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId).OrderByDescending(x=>x.Id).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, IsAlive=app.IsAlive, LastCheck= app.LastCheck }).ToList();
         }
 
         public UpdateTargetAppDto GetOne(GetOneTargetAppDto request)

@@ -3,59 +3,65 @@
 }
 @model HealthCheck.Models.DTOs.ViewModels.AppManagerIndexVM
 
-<table class="table table-bordered table-striped w-100">
-    <tr>
-        <th width="25%">
-            App
-        </th>
-        <th width="25%">
-            Url
-        </th>
-        <th width="15%">
-            Last Check
-        </th>
-        <th width="15%">
-            Status
-        </th>
-        <th width="20%">
-            Actions
-        </th>
-    </tr>
-
-    @if (Model != null && Model.Apps != null && Model.Apps.Any())
-    {
-        foreach (var item in Model.Apps)
-        {
+<div id="AppStatuses">
+    <table class="table table-bordered table-striped w-100">
+        <thead>
             <tr>
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.Url
-                </td>
-                <td>
-                    @(item.LastCheck)
-                </td>
-                <td>
-                    <button type="button" class="badge badge-@((item.IsAlive.HasValue && item.IsAlive.Value) ? "success" : (item.IsAlive==null) ?"light" :"danger")">
-                        @((item.IsAlive.HasValue && item.IsAlive.Value)?"Live": (item.IsAlive==null) ?"Not Checked": "Down")
-                    </button>
-                </td>
-                <td>
-                    <a class="btn btn-warning" href="/AppManager/Update/@item.Id">Edit</a>
-                    <a class="btn btn-danger" href="/AppManager/Delete/@item.Id">Delete</a>
-                </td>
+                <th width="25%">
+                    App
+                </th>
+                <th width="25%">
+                    Url
+                </th>
+                <th width="15%">
+                    Last Check
+                </th>
+                <th width="15%">
+                    Status
+                </th>
+                <th width="20%">
+                    Actions
+                </th>
             </tr>
-        }
-    }
-    else
-    {
-        <tr>
-            <td colspan="5" class="text-center">
-                You don't have any apps <a asp-area="" asp-controller="AppManager" asp-action="Create">Add a Target App</a>
-            </td>
-        </tr>
-    }
+        </thead>
+            <tbody>
+                @if (Model != null && Model.Apps != null && Model.Apps.Any())
+                {
+                    foreach (var item in Model.Apps)
+                    {
+                        <tr id="tr-@item.Id">
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Url
+                            </td>
+                            <td>
+                                @(item.LastCheck)
+                            </td>
+                            <td>
+                                <button type="button" class="badge badge-@((item.IsAlive.HasValue && item.IsAlive.Value) ? "success" : (item.IsAlive==null) ?"light" :"danger")">
+                                    @((item.IsAlive.HasValue && item.IsAlive.Value)?"Live": (item.IsAlive==null) ?"Not Checked": "Down")
+                                </button>
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" href="/AppManager/Update/@item.Id">Edit</a>
+                                <button name="@item.Name" id="@item.Id" class="btn btn-danger delete" href="/AppManager/Delete/@item.Id">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            You don't have any apps <a asp-area="" asp-controller="AppManager" asp-action="Create">Add a Target App</a>
+                        </td>
+                    </tr>
+                }
 
-</table>
+
+            </tbody>
+        </table>
+</div>
 
