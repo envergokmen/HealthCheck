@@ -36,7 +36,6 @@ $(document).ready(function () {
 
                                 $(`#${id}`).addClass("new");
                                 setTimeout(function () { $(`#${id}`).removeClass("new"); }, 2000);
-
                                 $(`#${id}`).html($(this).html());
 
                             }
@@ -52,7 +51,6 @@ $(document).ready(function () {
         $("#AppStatuses table").on("click", ".delete", function (e) {
 
             e.preventDefault();
-
             itemToDeleteId = $(this).attr("id");
             $("#itemname").text($(this).attr("name"));
 
@@ -70,7 +68,6 @@ $(document).ready(function () {
                         if (data == "true") {
 
                             $('#Confirm').modal('hide');
-
                             $deletedElem.addClass("deleted");
                             $deletedElem.fadeOut("slow");
 

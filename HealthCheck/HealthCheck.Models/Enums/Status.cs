@@ -16,4 +16,9 @@ namespace HealthCheck.Models
         [Description("Deleted")]
         Deleted = 2
     }
+
+    public enum Policy
+    {
+        Manager
+    }
 }

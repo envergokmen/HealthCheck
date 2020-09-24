@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using HealthCheck.Database;
+using HealthCheck.Models;
 using HealthCheck.Models.DTOs;
 using HealthCheck.Services;
 using HealthCheck.Web.Membership;
@@ -48,6 +50,8 @@ namespace HealthCheck.Web
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddAuthorization();
 
         }
 
