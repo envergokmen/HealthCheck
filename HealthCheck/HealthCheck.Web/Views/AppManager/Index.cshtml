@@ -7,8 +7,11 @@
     <table class="table table-bordered table-striped w-100">
         <thead>
             <tr>
-                <th width="25%">
+                <th width="15%">
                     App
+                </th>
+                <th width="10%">
+                    Interval
                 </th>
                 <th width="25%">
                     Url
@@ -29,26 +32,29 @@
                 {
                     foreach (var item in Model.Apps)
                     {
-                        <tr id="tr-@item.Id">
-                            <td>
-                                @item.Name
-                            </td>
-                            <td>
-                                @item.Url
-                            </td>
-                            <td>
-                                @(item.LastCheck)
-                            </td>
-                            <td>
-                                <button type="button" class="badge badge-@((item.IsAlive.HasValue && item.IsAlive.Value) ? "success" : (item.IsAlive==null) ?"light" :"danger")">
-                                    @((item.IsAlive.HasValue && item.IsAlive.Value)?"Live": (item.IsAlive==null) ?"Not Checked": "Down")
-                                </button>
-                            </td>
-                            <td>
-                                <a class="btn btn-warning" href="/AppManager/Update/@item.Id">Edit</a>
-                                <button name="@item.Name" id="@item.Id" class="btn btn-danger delete" href="/AppManager/Delete/@item.Id">Delete</button>
-                            </td>
-                        </tr>
+                <tr id="tr-@item.Id">
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.IntervalType (@item.IntervalValue)
+                    </td>
+                    <td>
+                        @item.Url
+                    </td>
+                    <td>
+                        @(item.LastCheck)
+                    </td>
+                    <td>
+                        <button type="button" class="badge badge-@((item.IsAlive.HasValue && item.IsAlive.Value) ? "success" : (item.IsAlive==null) ?"light" :"danger")">
+                            @((item.IsAlive.HasValue && item.IsAlive.Value)?"Live": (item.IsAlive==null) ?"Not Checked": "Down")
+                        </button>
+                    </td>
+                    <td>
+                        <a class="btn btn-warning" href="/AppManager/Update/@item.Id">Edit</a>
+                        <button name="@item.Name" id="@item.Id" class="btn btn-danger delete" href="/AppManager/Delete/@item.Id">Delete</button>
+                    </td>
+                </tr>
                     }
                 }
                 else

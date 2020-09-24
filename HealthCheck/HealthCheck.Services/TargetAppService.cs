@@ -19,7 +19,7 @@ namespace HealthCheck.Services
 
         public List<TargetAppDto> All(GetTargetAllAppDto request)
         {
-            return _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId).OrderByDescending(x => x.Id).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, IsAlive = app.IsAlive, LastCheck = app.LastCheck }).ToList();
+            return _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId).OrderByDescending(x => x.Id).Select(app => new TargetAppDto {  IntervalType=app.IntervalType, IntervalValue=app.IntervalValue, CreatedById=app.CreatedById, Id = app.Id, Url = app.Url, Name = app.Name, IsAlive = app.IsAlive, LastCheck = app.LastCheck }).ToList();
         }
 
         public UpdateTargetAppDto GetOne(GetOneTargetAppDto request)
@@ -38,7 +38,7 @@ namespace HealthCheck.Services
             _db.TargetApps.Add(app);
             _db.SaveChanges();
 
-            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = registerDto.LoggedInUserId };
+            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = registerDto.LoggedInUserId, IntervalType=app.IntervalType, IntervalValue= app.IntervalValue, IsAlive=app.IsAlive, LastCheck=app.LastCheck };
         }
 
         public TargetAppDto Update(UpdateTargetAppDto updateDto)

@@ -35,9 +35,10 @@ namespace HealthCheck.Web
             services.AddControllersWithViews();
             services.AddDbContext<HealthContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HealthDbCon")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IMembershipService, MembershipService>();
-            services.AddTransient<ITargetAppService, TargetAppService>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMembershipService, MembershipService>();
+            services.AddScoped<ITargetAppService, TargetAppService>();
             services.AddScoped<IBackgroundHealthCheckerService, BgHealthCheckingService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");

@@ -23,20 +23,20 @@ namespace HealthCheck.Web.Filters
     {
         readonly string policy;
 
-        readonly IAuthorizationService authorizationService;
-        readonly MembershipService membershipService;
+        readonly IAuthorizationService _authorizationService;
+        readonly IMembershipService _membershipService;
 
-        public PolicyBasedAuthorize(string policy, IAuthorizationService authorizationService, MembershipService membershipService)
+        public PolicyBasedAuthorize(string policy, IAuthorizationService authorizationService, IMembershipService membershipService)
         {
             this.policy = policy;
-            this.authorizationService = authorizationService;
-            this.membershipService = membershipService;
+            _authorizationService = authorizationService;
+            _membershipService = membershipService;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
 
-            if(membershipService.GetUser()!=null)
+            if(_membershipService.GetUser()!=null)
             {
                 return;
             }

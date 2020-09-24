@@ -12,9 +12,9 @@ namespace HealthCheck.Web.Membership
     public class MembershipService : IMembershipService
     {
         private readonly HttpContext httpContext;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public MembershipService(IHttpContextAccessor contextAccessor, UserService userService)
+        public MembershipService(IHttpContextAccessor contextAccessor, IUserService userService)
         {
             httpContext = contextAccessor?.HttpContext;
             _userService = userService;

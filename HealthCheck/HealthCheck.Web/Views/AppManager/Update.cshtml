@@ -4,7 +4,12 @@
     ViewData["Title"] = "Update";
 }
 
-<h1>Modify</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Modif an app</li>
+    </ol>
+</nav>
 
 <hr />
 <div class="row">
@@ -32,19 +37,19 @@
                 <div class="btn-group mr-2" role="group" id="IntervalTypeGroup">
                     <label class="btn @(Model.IntervalType== HealthCheck.Models.IntervalType.Minutely?"btn-primary":"btn-secondary")">
                         Minutely
-                        <input name="IntervalType" type="radio" value="Minutely" data-max="60" @(Model.IntervalType == HealthCheck.Models.IntervalType.Minutely ? "checked":"") />
+                        <input name="IntervalType" type="radio" value="Minutely" data-max="60" @(Model.IntervalType == HealthCheck.Models.IntervalType.Minutely ? "checked" : "") />
                     </label>
                     <label class="btn @(Model.IntervalType== HealthCheck.Models.IntervalType.Hourly?"btn-primary":"btn-secondary")">
                         Hourly
-                        <input name="IntervalType" type="radio" value="Hourly" data-max="23" @(Model.IntervalType == HealthCheck.Models.IntervalType.Hourly ? "checked":"") />
+                        <input name="IntervalType" type="radio" value="Hourly" data-max="23" @(Model.IntervalType == HealthCheck.Models.IntervalType.Hourly ? "checked" : "") />
                     </label>
                     <label class="btn @(Model.IntervalType== HealthCheck.Models.IntervalType.Daily?"btn-primary":"btn-secondary")">
                         Daily
-                        <input name="IntervalType" type="radio" value="Daily" data-max="31" @(Model.IntervalType == HealthCheck.Models.IntervalType.Daily ? "checked":"") />
+                        <input name="IntervalType" type="radio" value="Daily" data-max="31" @(Model.IntervalType == HealthCheck.Models.IntervalType.Daily ? "checked" : "") />
                     </label>
                     <label class="btn @(Model.IntervalType== HealthCheck.Models.IntervalType.Monthly?"btn-primary":"btn-secondary")">
                         Monthly
-                        <input name="IntervalType" type="radio" value="Monthly" data-max="11" @(Model.IntervalType == HealthCheck.Models.IntervalType.Monthly ? "checked":"") />
+                        <input name="IntervalType" type="radio" value="Monthly" data-max="11" @(Model.IntervalType == HealthCheck.Models.IntervalType.Monthly ? "checked" : "") />
                     </label>
                 </div>
 
