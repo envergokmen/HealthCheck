@@ -7,16 +7,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Services;
+using HealthCheck.Services.NotificationServices;
 
 namespace HealthCheck.Web
 {
 
-    public class BackgroundHangService : IBackgroundHangService
+    public class BgHealthCheckingService : IBackgroundHealthCheckerService
     {
-        public readonly HealthCheckService _healthCheckService;
-        public readonly UserService _userService;
+        public readonly ITargetAppService _healthCheckService;
+        public readonly IUserService _userService;
 
-        public BackgroundHangService(UserService userService, HealthCheckService healthCheckService)
+        public BgHealthCheckingService(IUserService userService, ITargetAppService healthCheckService)
         {
             _healthCheckService = healthCheckService;
             _userService = userService;

@@ -2,7 +2,7 @@
 
 namespace HealthCheck.Web
 {
-    public interface IBackgroundHangService
+    public interface IBackgroundHealthCheckerService
     {
         void CheckDownOrAlive(TargetAppDto item);
     }

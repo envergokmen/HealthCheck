@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HealthCheck.Web.Membership
 {
-    public class MembershipService
+    public class MembershipService : IMembershipService
     {
         private readonly HttpContext httpContext;
         private readonly UserService _userService;

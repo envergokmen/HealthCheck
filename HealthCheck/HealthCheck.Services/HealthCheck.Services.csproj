@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="1.7.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HealthCheck.Database\HealthCheck.Database.csproj" />
     <ProjectReference Include="..\HealthCheck.Models\HealthCheck.Models.csproj" />
   </ItemGroup>

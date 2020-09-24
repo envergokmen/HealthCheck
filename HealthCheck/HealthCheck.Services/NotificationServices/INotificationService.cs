@@ -1,7 +1,7 @@
 ﻿using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Models.DTOs.User;
 
-namespace HealthCheck.Services
+namespace HealthCheck.Services.NotificationServices
 {
     public interface INotificationService
     {

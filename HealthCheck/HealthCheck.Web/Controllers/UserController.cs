@@ -15,10 +15,10 @@ namespace HealthCheck.Web.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
-        private readonly MembershipService _membershipService;
+        private readonly IMembershipService _membershipService;
 
 
-        public UserController(ILogger<UserController> logger, MembershipService membershipService)
+        public UserController(ILogger<UserController> logger, IMembershipService membershipService)
         {
             _logger = logger;
             _membershipService = membershipService;

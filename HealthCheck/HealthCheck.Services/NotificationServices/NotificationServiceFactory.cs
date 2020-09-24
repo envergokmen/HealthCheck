@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HealthCheck.Services
+namespace HealthCheck.Services.NotificationServices
 {
     public class NotificationServiceFactory
     {

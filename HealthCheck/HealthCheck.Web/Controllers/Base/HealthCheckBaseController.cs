@@ -11,17 +11,17 @@ namespace HealthCheck.Web.Controllers
 {
     public class HealthCheckBaseController : Controller
     {
-        private readonly MembershipService _userService;
+        private readonly IMembershipService _membershipService;
         protected UserDto user;
 
-        public HealthCheckBaseController(MembershipService _userService)
+        public HealthCheckBaseController(IMembershipService _userService)
         {
-            this._userService = _userService;
+            this._membershipService = _userService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            this.user = _userService.GetUser();
+            this.user = _membershipService.GetUser();
             ViewBag.User = user;
 
             base.OnActionExecuting(context);

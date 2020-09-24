@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using HealthCheck.Web.Filters;
 using Hangfire;
 using HealthCheck.Models;
+using HealthCheck.Services.Utilities;
 
 namespace HealthCheck.Web.Controllers
 {
@@ -22,16 +23,16 @@ namespace HealthCheck.Web.Controllers
     public class AppManagerController : HealthCheckBaseController
     {
         private readonly ILogger<AppManagerController> _logger;
-        private readonly HealthCheckService _healthCheckService;
-        private readonly MembershipService _userService;
-        private readonly IBackgroundHangService _bgCheckService;
+        private readonly ITargetAppService _healthCheckService;
+        private readonly IMembershipService _memeberShipService;
+        private readonly IBackgroundHealthCheckerService _bgCheckService;
 
 
-        public AppManagerController(ILogger<AppManagerController> logger, HealthCheckService healthCheckService, MembershipService userService, IBackgroundHangService bgCheckService) : base(userService)
+        public AppManagerController(ILogger<AppManagerController> logger, ITargetAppService healthCheckService, IMembershipService userService, IBackgroundHealthCheckerService bgCheckService) : base(userService)
         {
             _logger = logger;
             _healthCheckService = healthCheckService;
-            _userService = userService;
+            _memeberShipService = userService;
             _bgCheckService = bgCheckService;
         }
 
@@ -51,7 +52,7 @@ namespace HealthCheck.Web.Controllers
 
         public IActionResult GetStatuses()
         {
-            var user = _userService.GetUser();
+            var user = _memeberShipService.GetUser();
           
             AppManagerIndexVM model = new AppManagerIndexVM(user);
             model.Apps = _healthCheckService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
@@ -72,7 +73,7 @@ namespace HealthCheck.Web.Controllers
             app.LoggedInUserId = user.Id;
             var created = _healthCheckService.Add(app);
 
-            RecurringJob.AddOrUpdate("site-healthcheck-" + created.Id.ToString() , methodCall: () => _bgCheckService.CheckDownOrAlive(created), cronExpression: GetCronExpression(app.IntervalType, app.IntervalValue));
+            RecurringJob.AddOrUpdate("site-healthcheck-" + created.Id.ToString() , methodCall: () => _bgCheckService.CheckDownOrAlive(created), cronExpression: CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
             return RedirectToAction("Index");
         }
 
@@ -103,32 +104,12 @@ namespace HealthCheck.Web.Controllers
             app.LoggedInUserId = user.Id;
             var updated = _healthCheckService.Update(app);
 
-            RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), GetCronExpression(app.IntervalType, app.IntervalValue));
+            RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
 
             
             return RedirectToAction("Index");
 
         }
 
-        public string GetCronExpression(IntervalType intervalType, int value)
-        {
-            switch (intervalType)
-            {
-                case IntervalType.Minutely:
-                    return Cron.MinuteInterval(value);
-                    break;
-                case IntervalType.Hourly:
-                    return Cron.HourInterval(value);
-                    break;
-                case IntervalType.Daily:
-                    return Cron.DayInterval(value);
-                    break;
-                case IntervalType.Monthly:
-                    return Cron.MonthInterval(value);
-                    break;
-            }
-
-            throw new Exception("please select a valid interval type");
-        }
     }
 }

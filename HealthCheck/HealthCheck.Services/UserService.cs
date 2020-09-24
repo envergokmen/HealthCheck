@@ -11,41 +11,41 @@ using System.Text;
 
 namespace HealthCheck.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        private readonly HealthContext db;
-        protected readonly AppSettings appSettings;
+        private readonly HealthContext _db;
+        protected readonly AppSettings _appSettings;
 
-        public UserService(HealthContext _db, IOptions<AppSettings> _appSettings)
+        public UserService(HealthContext db, IOptions<AppSettings> appSettings)
         {
-            db = _db;
-            this.appSettings = _appSettings.Value;
+            _db = db;
+            _appSettings = appSettings.Value;
         }
 
         public UserDto Login(UserLoginDto login)
         {
-            return db.Users.Where(x => x.Username == login.Username && x.Password == SecurityUtils.Encrypt(login.Password, appSettings.Secret)).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference }).FirstOrDefault();
+            return _db.Users.Where(x => x.Username == login.Username && x.Password == SecurityUtils.Encrypt(login.Password, _appSettings.Secret)).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference }).FirstOrDefault();
         }
 
         public UserDto GetById(int Id)
         {
-            return db.Users.Where(x => x.Id == Id).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference }).FirstOrDefault();
+            return _db.Users.Where(x => x.Id == Id).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference }).FirstOrDefault();
         }
 
         public NotificationType GetUserNotificationType(int Id)
         {
-            return db.Users.Where(x => x.Id == Id).Select(x => x.NotificationPreference).FirstOrDefault();
+            return _db.Users.Where(x => x.Id == Id).Select(x => x.NotificationPreference).FirstOrDefault();
         }
 
         public UserDto Register(UserRegisterDto registerDto)
         {
-            var user = db.Users.Where(x => x.Username == registerDto.Username).FirstOrDefault();
+            var user = _db.Users.Where(x => x.Username == registerDto.Username).FirstOrDefault();
 
-            if (user != null) { throw new Exception("This username in use");  };
+            if (user != null) { throw new Exception("This username in use"); };
 
-            user = new User { Email=registerDto.Email, Gsm= registerDto.Gsm, Username = registerDto.Username, Name = registerDto.Name, Password = SecurityUtils.Encrypt(registerDto.Password, appSettings.Secret) };
-            db.Users.Add(user);
-            db.SaveChanges();
+            user = new User { Email = registerDto.Email, Gsm = registerDto.Gsm, Username = registerDto.Username, Name = registerDto.Name, Password = SecurityUtils.Encrypt(registerDto.Password, _appSettings.Secret) };
+            _db.Users.Add(user);
+            _db.SaveChanges();
 
             return new UserDto { Id = user.Id, UserName = user.Username, Name = user.Name, NotificationPreference = user.NotificationPreference };
 
