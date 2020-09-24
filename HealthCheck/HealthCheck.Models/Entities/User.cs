@@ -19,9 +19,11 @@ namespace HealthCheck.Models
 
         [StringLength(90)]
         [EmailAddress]
+        [Required]
         public string Email { get; set; }
 
         [StringLength(20)]
+        [Required]
         public string Gsm { get; set; }
 
         [StringLength(30)]

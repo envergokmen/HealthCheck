@@ -28,15 +28,33 @@
                 <span asp-validation-for="Url" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="IntervalType" class="control-label"></label>
-                <input asp-for="IntervalType" class="form-control" placeholder="IntervalType" />
-                <span asp-validation-for="IntervalType" class="text-danger"></span>
+        <div class="form-group">
+
+            <label asp-for="IntervalType" class="control-label"></label>
+            <div class="btn-group mr-2" role="group" id="IntervalTypeGroup">
+                <label class="btn btn-primary">
+                    Minutely
+                    <input name="IntervalType" type="radio" value="Minutely" checked data-max="60" />
+                </label>
+                <label class="btn btn-secondary">
+                    Hourly
+                    <input name="IntervalType" type="radio" value="Hourly" data-max="23" />
+                </label>
+                <label class="btn btn-secondary">
+                    Daily
+                    <input name="IntervalType" type="radio" value="Daily" data-max="31" />
+                </label>
+                <label class="btn btn-secondary">
+                    Monthly
+                    <input name="IntervalType" type="radio" value="Monthly" data-max="11" />
+                </label>
             </div>
+
+        </div>
 
             <div class="form-group">
                 <label asp-for="IntervalValue" class="control-label"></label>
-                <input asp-for="IntervalValue" class="form-control" placeholder="IntervalType" />
+                <input asp-for="IntervalValue" class="form-control" placeholder="IntervalValue" min="1" max="30"/>
                 <span asp-validation-for="IntervalValue" class="text-danger"></span>
             </div>
 

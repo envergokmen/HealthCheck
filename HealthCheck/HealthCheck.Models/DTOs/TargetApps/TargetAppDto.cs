@@ -18,5 +18,7 @@ namespace HealthCheck.Models.DTOs.TargetApps
         public DateTime? LastCheck { get; set; }
         public bool? IsAlive { get; set; }
 
+        public int? CreatedById { get; set; }
+
     }
 }

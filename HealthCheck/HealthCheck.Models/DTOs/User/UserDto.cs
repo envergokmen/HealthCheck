@@ -11,7 +11,7 @@ namespace HealthCheck.Models.DTOs.User
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Gsm { get; set; }
-
+        public NotificationType NotificationPreference { get; set; }
 
     }
 }

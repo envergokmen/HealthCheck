@@ -29,11 +29,11 @@ namespace HealthCheck.Models
 
     public enum IntervalType
     {
-        Seconds = 0,
-        Minutes = 1,
-        Hours = 2,
-        Days = 3,
-        Months = 4,
-        Years = 4
+        Minutely = 1,
+        Hourly = 2,
+        Daily = 3,
+        Monthly = 5,
+        Yearly = 6
+
     }
 }

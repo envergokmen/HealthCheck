@@ -13,6 +13,8 @@ using HealthCheck.Models.DTOs.ViewModels;
 using HealthCheck.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using HealthCheck.Web.Filters;
+using Hangfire;
+using HealthCheck.Models;
 
 namespace HealthCheck.Web.Controllers
 {
@@ -22,12 +24,15 @@ namespace HealthCheck.Web.Controllers
         private readonly ILogger<AppManagerController> _logger;
         private readonly HealthCheckService _healthCheckService;
         private readonly MembershipService _userService;
+        private readonly IBackgroundHangService _bgCheckService;
 
-        public AppManagerController(ILogger<AppManagerController> logger, HealthCheckService healthCheckService, MembershipService userService) : base(userService)
+
+        public AppManagerController(ILogger<AppManagerController> logger, HealthCheckService healthCheckService, MembershipService userService, IBackgroundHangService bgCheckService) : base(userService)
         {
             _logger = logger;
             _healthCheckService = healthCheckService;
             _userService = userService;
+            _bgCheckService = bgCheckService;
         }
 
 
@@ -65,7 +70,9 @@ namespace HealthCheck.Web.Controllers
         {
 
             app.LoggedInUserId = user.Id;
-            _healthCheckService.Add(app);
+            var created = _healthCheckService.Add(app);
+
+            RecurringJob.AddOrUpdate("site-healthcheck-" + created.Id.ToString() , methodCall: () => _bgCheckService.CheckDownOrAlive(created), cronExpression: GetCronExpression(app.IntervalType, app.IntervalValue));
             return RedirectToAction("Index");
         }
 
@@ -73,6 +80,7 @@ namespace HealthCheck.Web.Controllers
         {
            
             _healthCheckService.Delete(new DeleteTargetAppDto { Id = Id, LoggedInUserId = user.Id });
+            RecurringJob.RemoveIfExists("site-healthcheck-" + Id.ToString());
 
             if (Request.IsAjaxRequest())
             {
@@ -85,6 +93,7 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Update(int Id)
         {
             var model = _healthCheckService.GetOne(new GetOneTargetAppDto { Id = Id, LoggedInUserId = user.Id });
+
             return View(model);
         }
 
@@ -92,9 +101,34 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Update(UpdateTargetAppDto app)
         {
             app.LoggedInUserId = user.Id;
-            _healthCheckService.Update(app);
+            var updated = _healthCheckService.Update(app);
+
+            RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), GetCronExpression(app.IntervalType, app.IntervalValue));
+
+            
             return RedirectToAction("Index");
 
+        }
+
+        public string GetCronExpression(IntervalType intervalType, int value)
+        {
+            switch (intervalType)
+            {
+                case IntervalType.Minutely:
+                    return Cron.MinuteInterval(value);
+                    break;
+                case IntervalType.Hourly:
+                    return Cron.HourInterval(value);
+                    break;
+                case IntervalType.Daily:
+                    return Cron.DayInterval(value);
+                    break;
+                case IntervalType.Monthly:
+                    return Cron.MonthInterval(value);
+                    break;
+            }
+
+            throw new Exception("please select a valid interval type");
         }
     }
 }

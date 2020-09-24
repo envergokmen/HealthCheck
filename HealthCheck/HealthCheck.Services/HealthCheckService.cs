@@ -38,21 +38,22 @@ namespace HealthCheck.Services
             db.TargetApps.Add(app);
             db.SaveChanges();
 
-            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name };
+            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = registerDto.LoggedInUserId };
         }
 
-        public TargetAppDto Update(UpdateTargetAppDto registerDto)
+        public TargetAppDto Update(UpdateTargetAppDto updateDto)
         {
-            var app = db.TargetApps.FirstOrDefault(c => c.Id == registerDto.Id && c.CreatedById==registerDto.LoggedInUserId);
+            var app = db.TargetApps.FirstOrDefault(c => c.Id == updateDto.Id && c.CreatedById == updateDto.LoggedInUserId);
 
-            app.Name = registerDto.Name;
-            app.Url = registerDto.Url;
-            app.IntervalType = registerDto.IntervalType;
-            app.IntervalValue = registerDto.IntervalValue;
+            app.Name = updateDto.Name;
+            app.Url = updateDto.Url;
+            app.IntervalType = updateDto.IntervalType;
+            app.IntervalValue = updateDto.IntervalValue;
+            app.IsAlive = null;
 
             db.SaveChanges();
 
-            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name };
+            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = updateDto.LoggedInUserId };
         }
 
         public TargetAppDto MarkAsChecked(UpdateChecksStatusDto checkStatus)

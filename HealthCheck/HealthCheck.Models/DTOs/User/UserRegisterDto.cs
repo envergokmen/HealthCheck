@@ -17,9 +17,11 @@ namespace HealthCheck.Models.DTOs.User
 
         [StringLength(90)]
         [EmailAddress]
+        [Required]
         public string Email { get; set; }
 
         [StringLength(20)]
+        [Required]
         public string Gsm { get; set; }
 
         [Required]

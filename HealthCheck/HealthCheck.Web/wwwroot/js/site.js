@@ -78,7 +78,25 @@ $(document).ready(function () {
                     }
                 });
         });
+
+
     }
+
+
+
+    $("#IntervalTypeGroup").on("change", "input", function (e) {
+
+        console.log($(this).val());
+        $("#IntervalValue").attr("max", $(this).attr("data-max"));
+
+        $activeItem = $(this).closest("label");
+        $("#IntervalTypeGroup label").removeClass("btn-primary");
+        $("#IntervalTypeGroup label").addClass("btn-secondary");
+
+        $activeItem.addClass("btn btn-primary");
+
+
+    });
 
 
 });

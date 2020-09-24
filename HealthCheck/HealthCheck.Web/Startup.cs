@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Hangfire;
 using HealthCheck.Database;
 using HealthCheck.Models;
 using HealthCheck.Models.DTOs;
@@ -37,12 +38,13 @@ namespace HealthCheck.Web
             services.AddTransient<UserService, UserService>();
             services.AddTransient<MembershipService, MembershipService>();
             services.AddTransient<HealthCheckService, HealthCheckService>();
-
-            services.AddSingleton<BackgroundHealthCheckService, BackgroundHealthCheckService>();
-            services.AddHostedService<BackgroundHealthCheckService>();
+            services.AddScoped<IBackgroundHangService, BackgroundHangService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+            
+            services.AddHangfire(x => x.UseSqlServerStorage("Server=DESKTOP-UP8JB10;Database=HangFire2;user id=sa; password=123456;MultipleActiveResultSets=true"));
+            services.AddHangfireServer();
 
             services.AddSession(options =>
             {
@@ -72,7 +74,7 @@ namespace HealthCheck.Web
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
-
+            app.UseHangfireDashboard();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
