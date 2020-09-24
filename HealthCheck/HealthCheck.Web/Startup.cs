@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HealthCheck.Database;
+using HealthCheck.Models.DTOs;
 using HealthCheck.Services;
 using HealthCheck.Web.Membership;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,16 @@ namespace HealthCheck.Web
             services.AddSingleton<BackgroundHealthCheckService, BackgroundHealthCheckService>();
             services.AddHostedService<BackgroundHealthCheckService>();
 
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +66,7 @@ namespace HealthCheck.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

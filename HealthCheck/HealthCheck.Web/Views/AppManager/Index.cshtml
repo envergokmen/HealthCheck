@@ -1,11 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Health Check Apps";
 }
-@model List<HealthCheck.Models.DTOs.TargetApps.TargetAppDto>
-
-<div class="text-center">
-    <h5 class="mb-10">App Manager  <a class="btn btn-primary" asp-area="" asp-controller="AppManager" asp-action="Create">Add a Target App</a> </h5>
-</div>
+@model HealthCheck.Models.DTOs.ViewModels.AppManagerIndexVM
 
 <table class="table table-bordered table-striped w-100">
     <tr>
@@ -26,39 +22,40 @@
         </th>
     </tr>
 
-    @if (Model != null && Model.Any())
+    @if (Model != null && Model.Apps != null && Model.Apps.Any())
     {
-        foreach (var item in Model)
+        foreach (var item in Model.Apps)
         {
-<tr>
-    <td>
-        @item.Name
-    </td>
-    <td>
-        @item.Url
-    </td>
-    <td>
-        @(item.LastCheck)
-    </td>
-    <td>
-        <button type="button" class="badge badge-@((item.IsAlive.HasValue && item.IsAlive.Value) ? "success" : (item.IsAlive==null) ?"light" :"danger")">
-            @((item.IsAlive.HasValue && item.IsAlive.Value)?"Live": (item.IsAlive==null) ?"Not Checked": "Down")
-        </button>
-    </td>
-    <td>
-        <a class="btn btn-warning" href="/AppManager/Update/@item.Id">Edit</a>
-        <a class="btn btn-danger" href="/AppManager/Delete/@item.Id">Delete</a>
-    </td>
-</tr>
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Url
+                </td>
+                <td>
+                    @(item.LastCheck)
+                </td>
+                <td>
+                    <button type="button" class="badge badge-@((item.IsAlive.HasValue && item.IsAlive.Value) ? "success" : (item.IsAlive==null) ?"light" :"danger")">
+                        @((item.IsAlive.HasValue && item.IsAlive.Value)?"Live": (item.IsAlive==null) ?"Not Checked": "Down")
+                    </button>
+                </td>
+                <td>
+                    <a class="btn btn-warning" href="/AppManager/Update/@item.Id">Edit</a>
+                    <a class="btn btn-danger" href="/AppManager/Delete/@item.Id">Delete</a>
+                </td>
+            </tr>
         }
     }
     else
     {
         <tr>
-            <td colspan="4" class="text-center">
-            You don't have any apps <a class="btn btn-primary" asp-area="" asp-controller="AppManager" asp-action="Create">Add a Target App</a>
+            <td colspan="5" class="text-center">
+                You don't have any apps <a asp-area="" asp-controller="AppManager" asp-action="Create">Add a Target App</a>
             </td>
         </tr>
     }
+
 </table>
 

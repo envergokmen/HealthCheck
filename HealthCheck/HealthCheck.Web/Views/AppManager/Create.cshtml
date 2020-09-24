@@ -4,7 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Target App to Track</li>
+    </ol>
+</nav>
 
 <hr />
 <div class="row">
@@ -13,12 +19,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" placeholder="Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Url" class="control-label"></label>
-                <input asp-for="Url" class="form-control" />
+                <input asp-for="Url" class="form-control"  placeholder="Url" />
                 <span asp-validation-for="Url" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -28,7 +34,7 @@
     </div>
 </div>
 
-<div>
+<div class="mt-10">
     <a asp-action="Index">Back to List</a>
 </div>
 

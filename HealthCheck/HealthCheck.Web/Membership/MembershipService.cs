@@ -44,6 +44,11 @@ namespace HealthCheck.Web.Membership
             return _userService.Login(login);
         }
 
+        public void Logout()
+        {
+            httpContext.Session.Remove("User");
+        }
+
         public UserDto Register(UserRegisterDto registerDto)
         {
             return _userService.Register(registerDto);

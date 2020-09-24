@@ -36,6 +36,7 @@ namespace HealthCheck.Web.Controllers
 
             if (loginResult != null)
             {
+                _membershipService.SetUser(loginResult);
                 return RedirectToAction("Index", "AppManager");
             }
             else
@@ -53,10 +54,12 @@ namespace HealthCheck.Web.Controllers
         [HttpPost]
         public IActionResult Register(UserRegisterDto registerModel)
         {
-            var loginResult = _membershipService.Register(registerModel);
+            var registerResult = _membershipService.Register(registerModel);
 
-            if (loginResult != null)
+            if (registerResult != null)
             {
+                _membershipService.SetUser(registerResult);
+
                 return RedirectToAction("Index", "AppManager");
             }
             else
@@ -66,6 +69,11 @@ namespace HealthCheck.Web.Controllers
             }
         }
 
+        public IActionResult Logout()
+        {
+            _membershipService.Logout();
+            return RedirectToAction("Login", "User");
+        }
 
     }
 }
