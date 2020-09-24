@@ -17,6 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.AspNetCore;
 
 namespace HealthCheck.Web
 {
@@ -56,6 +59,15 @@ namespace HealthCheck.Web
 
             services.AddAuthorization();
 
+            services.AddLogging(
+              builder =>
+              {
+                  builder.AddFilter("Microsoft", LogLevel.Warning)
+                         .AddFilter("System", LogLevel.Warning)
+                         .AddFilter("NToastNotify", LogLevel.Warning)
+                         .AddFile("ErrorLogs.json");
+              });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,12 +83,21 @@ namespace HealthCheck.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSerilogRequestLogging(options => new RequestLoggingOptions
+            {
+
+
+            });
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
             app.UseHangfireDashboard();
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

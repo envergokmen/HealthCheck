@@ -41,7 +41,7 @@ namespace HealthCheck.Web.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty,"Invalid User Info");
+                ModelState.AddModelError(string.Empty, "Invalid User Info");
                 return View(loginModel);
             }
         }
@@ -77,10 +77,21 @@ namespace HealthCheck.Web.Controllers
 
         public IActionResult ErrorTest()
         {
-            var b = 0;
-            var a = 10 / b;
+            _logger.LogError("test ErrorTest user");
+            //var b = 10;
+            //var c = 0;
+            //var x = b / c;
 
-            return RedirectToAction("Login", "User");
+            return Content("OK");
+        }
+
+        public IActionResult Error2()
+        {
+            var b = 10;
+            var c = 0;
+            var x = b / c;
+
+            return Content("OK");
         }
 
     }
