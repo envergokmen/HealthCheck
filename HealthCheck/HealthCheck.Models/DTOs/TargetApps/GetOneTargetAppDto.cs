@@ -9,6 +9,5 @@ namespace HealthCheck.Models.DTOs.TargetApps
     {
         public int Id { get; set; }
 
-
     }
 }

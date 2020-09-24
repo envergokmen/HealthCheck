@@ -44,7 +44,8 @@ namespace HealthCheck.Web
             {
                 httpClient.Timeout = TimeSpan.FromSeconds(5);
                 var response = await httpClient.GetAsync(url);
-                return response.StatusCode == System.Net.HttpStatusCode.OK ? true : false;
+                var statusCodeNumber = (int)response.StatusCode;
+                return statusCodeNumber  >= 200 && statusCodeNumber < 300 ? true : false;
             }
 
         }

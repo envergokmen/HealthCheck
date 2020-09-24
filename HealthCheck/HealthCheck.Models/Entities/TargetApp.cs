@@ -16,7 +16,7 @@ namespace HealthCheck.Models
         public string Url { get; set; }
         public DateTime? LastCheck { get; set; }
         public bool? IsAlive { get; set; }
-
-
+        public IntervalType IntervalType { get; set; }
+        public int IntervalValue { get; set; }
     }
 }

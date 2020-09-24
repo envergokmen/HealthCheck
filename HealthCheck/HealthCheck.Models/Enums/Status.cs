@@ -21,4 +21,19 @@ namespace HealthCheck.Models
     {
         Manager
     }
+    public enum NotificationType
+    {
+        Email=0,
+        Gsm=1
+    }
+
+    public enum IntervalType
+    {
+        Seconds = 0,
+        Minutes = 1,
+        Hours = 2,
+        Days = 3,
+        Month = 4,
+        Years = 4
+    }
 }

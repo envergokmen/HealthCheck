@@ -15,11 +15,12 @@ namespace HealthCheck.Models
         public string Name { get; set; }
 
         [StringLength(60)]
-        [Index("IX_Username",  IsClustered = false, IsUnique = true)]
         public string Username { get; set; }
 
         [StringLength(30)]
         public string Password { get; set; }
+
+        public NotificationType NotificationPreference { get; set; }
 
     }
 }
