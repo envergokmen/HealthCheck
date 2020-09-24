@@ -75,5 +75,13 @@ namespace HealthCheck.Web.Controllers
             return RedirectToAction("Login", "User");
         }
 
+        public IActionResult ErrorTest()
+        {
+            var b = 0;
+            var a = 10 / b;
+
+            return RedirectToAction("Login", "User");
+        }
+
     }
 }
