@@ -16,13 +16,10 @@ namespace HealthCheck.Web
         public readonly HealthCheckService _healthCheckService;
         public readonly UserService _userService;
 
-        private Timer _timer;
-
         public BackgroundHangService(UserService userService, HealthCheckService healthCheckService)
         {
             _healthCheckService = healthCheckService;
             _userService = userService;
-           // _healthCheckService = new HealthCheckService(new Database.HealthContext());
         }
 
         public void CheckDownOrAlive(TargetAppDto item)
