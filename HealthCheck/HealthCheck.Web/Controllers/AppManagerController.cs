@@ -50,7 +50,7 @@ namespace HealthCheck.Web.Controllers
         public IActionResult GetStatuses()
         {
             var user = _memeberShipService.GetUser();
-          
+
             AppManagerIndexVM model = new AppManagerIndexVM(user);
             model.Apps = _targetAppService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
 
@@ -67,12 +67,19 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Create(CreateTargetAppDto app)
         {
 
+            if (!app.Url.IsValidUrl())
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Url Please Check");
+                return View(app);
+            }
+
             app.LoggedInUserId = user.Id;
-            var created = _targetAppService.Add(app);
+            _targetAppService.Add(app);
 
 
             return RedirectToAction("Index");
         }
+
 
         //to easy test sample apps.
         public IActionResult CreateBulk()
@@ -85,20 +92,20 @@ namespace HealthCheck.Web.Controllers
                 new CreateTargetAppDto {   Name = "facebook", Url = "https://www.facebook.com", LoggedInUserId = user.Id, IntervalType = IntervalType.Minutely, IntervalValue = 1 },
                 new CreateTargetAppDto {   Name = "http 500 test", Url = "https://httpstat.us/500", LoggedInUserId = user.Id, IntervalType = IntervalType.Minutely, IntervalValue = 1 }
             };
- 
+
             foreach (var app in testData)
             {
                 app.LoggedInUserId = user.Id;
                 _targetAppService.Add(app);
             }
-           
+
             return RedirectToAction("Index");
         }
 
 
         public IActionResult Delete(int Id)
         {
-           
+
             _targetAppService.Delete(new DeleteTargetAppDto { Id = Id, LoggedInUserId = user.Id });
             RecurringJob.RemoveIfExists("site-healthcheck-" + Id.ToString());
 
@@ -120,11 +127,16 @@ namespace HealthCheck.Web.Controllers
         [HttpPost]
         public IActionResult Update(UpdateTargetAppDto app)
         {
+
+            if (!app.Url.IsValidUrl())
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Url Please Check");
+                return View(app);
+            }
+
             app.LoggedInUserId = user.Id;
-            var updated = _targetAppService.Update(app);
-             
-            //RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
-            
+            _targetAppService.Update(app);
+
             return RedirectToAction("Index");
 
         }
