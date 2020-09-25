@@ -32,6 +32,11 @@ namespace HealthCheck.Services
             return _db.TargetApps.Where(x=>x.Id==appId).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById=app.CreatedById, IntervalType= app.IntervalType, IntervalValue=app.IntervalValue, IsAlive=app.IsAlive }).FirstOrDefault();
         }
 
+        public TargetAppDto GetOneToCheck(int appId, int createdById)
+        {
+            return _db.TargetApps.Where(x => x.Id == appId && x.CreatedById==createdById).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = app.CreatedById, IntervalType = app.IntervalType, IntervalValue = app.IntervalValue, IsAlive = app.IsAlive }).FirstOrDefault();
+        }
+
         public TargetAppDto Add(CreateTargetAppDto registerDto)
         {
             var app = new TargetApp { Name = registerDto.Name, Url = registerDto.Url, CreatedById = registerDto.LoggedInUserId, IntervalValue = registerDto.IntervalValue, IntervalType = registerDto.IntervalType };

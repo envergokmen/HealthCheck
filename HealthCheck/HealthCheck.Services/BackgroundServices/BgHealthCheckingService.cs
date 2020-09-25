@@ -27,7 +27,7 @@ namespace HealthCheck.Web
         {
             if (item == null) return null;
             AppCheckResultDto result = new AppCheckResultDto();
-
+           
             //left on purpos in order to track
             Debug.WriteLine($"Processing {item.Id}  -  {item.Name} url : {item.Url}");
 
@@ -51,6 +51,8 @@ namespace HealthCheck.Web
                 notificationService.NotifyDown(user, item);
                 result.NotifiedVia = user.NotificationPreference;
                 result.IsUserNotified = true;
+                result.UserId = user.Id;
+
             }
         }
 

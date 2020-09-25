@@ -12,13 +12,16 @@ namespace HealthCheck.Tests
     {
         public static void AddSeedTestData(HealthContext context)
         {
-            context.Users.Add(new User { Id = 1, Username = "enver", Name = "Enver Gökmen", Email = "envergokmen@gmail.com", Gsm = "5069516750" });
-            context.Users.Add(new User { Id = 2, Username = "diger", Name = "Diger Kullanıcı", Email = "vectorman87@gmail.com", Gsm = "055555555" });
+            context.Users.Add(new User { Id = 1, Username = "enver", Name = "Enver Gökmen", Email = "envergokmen@gmail.com", Gsm = "5069516750", NotificationPreference= NotificationType.Email });
+            context.Users.Add(new User { Id = 2, Username = "diger", Name = "Diger Kullanıcı", Email = "vectorman87@gmail.com", Gsm = "5069516750", NotificationPreference = NotificationType.Sms });
 
+            //user1's apps
             context.TargetApps.Add(new TargetApp { Id = 1, Name = "google", Url = "https://www.google.com", CreatedById = 1, IntervalType = IntervalType.Minutely, IntervalValue = 1 });
-            context.TargetApps.Add(new TargetApp { Id = 2, Name = "google", Url = "https://www.twitter.com", CreatedById = 1, IntervalType = IntervalType.Minutely, IntervalValue = 1 });
+            context.TargetApps.Add(new TargetApp { Id = 2, Name = "twitter", Url = "https://www.twitter.com", CreatedById = 1, IntervalType = IntervalType.Minutely, IntervalValue = 1 });
 
-            context.TargetApps.Add(new TargetApp { Id = 3, Name = "google", Url = "https://www.facebook.com", CreatedById = 2, IntervalType = IntervalType.Minutely, IntervalValue = 1 });
+            //users 2's apps
+            context.TargetApps.Add(new TargetApp { Id = 3, Name = "facebook", Url = "https://www.facebook.com", CreatedById = 2, IntervalType = IntervalType.Minutely, IntervalValue = 1 });
+
             context.SaveChanges();
         }
 
