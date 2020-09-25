@@ -29,7 +29,7 @@ namespace HealthCheck.Services
 
         public UserDto GetById(int Id)
         {
-            return _db.Users.Where(x => x.Id == Id).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference }).FirstOrDefault();
+            return _db.Users.Where(x => x.Id == Id).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference, Email=x.Email, Gsm=x.Gsm }).FirstOrDefault();
         }
 
         public NotificationType GetUserNotificationType(int Id)

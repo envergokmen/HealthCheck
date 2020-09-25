@@ -45,9 +45,10 @@ namespace HealthCheck.Web
             services.AddScoped<IBackgroundHealthCheckerService, BgHealthCheckingService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
+
             services.Configure<AppSettings>(appSettingsSection);
             
-            services.AddHangfire(x => x.UseSqlServerStorage("Server=DESKTOP-UP8JB10;Database=HangFire2;user id=sa; password=123456;MultipleActiveResultSets=true"));
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("HealthDbCon")));
             services.AddHangfireServer();
 
             services.AddSession(options =>

@@ -40,6 +40,8 @@ namespace HealthCheck.Web
             if (!isAlive)
             {
                 var user = _userService.GetById(item.CreatedById.GetValueOrDefault(0));
+                if (user == null || String.IsNullOrWhiteSpace(user.Email)) return;
+
                 var notificationService = NotificationServiceFactory.GetNotificationService(user.NotificationPreference);
                 notificationService.NotifyDown(user, item);
             }
