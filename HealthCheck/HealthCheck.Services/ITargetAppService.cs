@@ -11,7 +11,7 @@ namespace HealthCheck.Services
         UpdateTargetAppDto GetOne(GetOneTargetAppDto request);
         TargetAppDto GetOneToCheck(int appId);
         TargetAppDto GetOneToCheck(int appId, int createdById);
-        TargetAppDto MarkAsChecked(UpdateChecksStatusDto checkStatus);
+        //TargetAppDto MarkAsChecked(UpdateChecksStatusDto checkStatus);
         TargetAppDto Update(UpdateTargetAppDto updateDto);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HealthCheck.Database;
 using HealthCheck.Models;
 using HealthCheck.Models.DTOs.TargetApps;
+using HealthCheck.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace HealthCheck.Services
     public class TargetAppService : ITargetAppService
     {
         private readonly HealthContext _db;
+        private readonly IJobScheduler _jobScheduler;
 
-        public TargetAppService(HealthContext db)
+        public TargetAppService(HealthContext db, IJobScheduler jobScheduler)
         {
             _db = db;
+            _jobScheduler = jobScheduler;
         }
 
         public List<TargetAppDto> All(GetTargetAllAppDto request)
@@ -42,8 +45,11 @@ namespace HealthCheck.Services
             var app = new TargetApp { Name = registerDto.Name, Url = registerDto.Url, CreatedById = registerDto.LoggedInUserId, IntervalValue = registerDto.IntervalValue, IntervalType = registerDto.IntervalType };
             _db.TargetApps.Add(app);
             _db.SaveChanges();
+            var created = new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = registerDto.LoggedInUserId, IntervalType = app.IntervalType, IntervalValue = app.IntervalValue, IsAlive = app.IsAlive, LastCheck = app.LastCheck };
 
-            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = registerDto.LoggedInUserId, IntervalType=app.IntervalType, IntervalValue= app.IntervalValue, IsAlive=app.IsAlive, LastCheck=app.LastCheck };
+            _jobScheduler.AddOrUpdate(created);
+
+            return created;
         }
 
         public TargetAppDto Update(UpdateTargetAppDto updateDto)
@@ -57,20 +63,11 @@ namespace HealthCheck.Services
             app.IsAlive = null;
 
             _db.SaveChanges();
+            var updated= new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = updateDto.LoggedInUserId, IntervalType=app.IntervalType, IntervalValue=app.IntervalValue, IsAlive=app.IsAlive };
 
-            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = updateDto.LoggedInUserId };
-        }
+            _jobScheduler.AddOrUpdate(updated);
 
-        public TargetAppDto MarkAsChecked(UpdateChecksStatusDto checkStatus)
-        {
-            var app = _db.TargetApps.FirstOrDefault(c => c.Id == checkStatus.Id);
-
-            app.IsAlive = checkStatus.IsAlive;
-            app.LastCheck = checkStatus.CheckDate;
-
-            _db.SaveChanges();
-
-            return new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name };
+            return updated;
         }
 
         public bool Delete(DeleteTargetAppDto registerDto)
@@ -79,6 +76,7 @@ namespace HealthCheck.Services
 
             _db.TargetApps.Remove(app);
             _db.SaveChanges();
+            _jobScheduler.RemoveIfExists(app.Id);
 
             return true;
         }

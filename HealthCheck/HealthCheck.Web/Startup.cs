@@ -43,6 +43,7 @@ namespace HealthCheck.Web
             services.AddScoped<IMembershipService, MembershipService>();
             services.AddScoped<ITargetAppService, TargetAppService>();
             services.AddScoped<IBackgroundHealthCheckerService, BgHealthCheckingService>();
+            services.AddScoped<IJobScheduler, JobScheduler>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
 

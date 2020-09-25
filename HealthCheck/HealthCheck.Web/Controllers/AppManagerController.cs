@@ -25,15 +25,12 @@ namespace HealthCheck.Web.Controllers
         private readonly ILogger<AppManagerController> _logger;
         private readonly ITargetAppService _healthCheckService;
         private readonly IMembershipService _memeberShipService;
-        private readonly IBackgroundHealthCheckerService _bgCheckService;
 
-
-        public AppManagerController(ILogger<AppManagerController> logger, ITargetAppService healthCheckService, IMembershipService userService, IBackgroundHealthCheckerService bgCheckService) : base(userService)
+        public AppManagerController(ILogger<AppManagerController> logger, ITargetAppService healthCheckService, IMembershipService userService) : base(userService)
         {
             _logger = logger;
             _healthCheckService = healthCheckService;
             _memeberShipService = userService;
-            _bgCheckService = bgCheckService;
         }
 
 
@@ -73,9 +70,32 @@ namespace HealthCheck.Web.Controllers
             app.LoggedInUserId = user.Id;
             var created = _healthCheckService.Add(app);
 
-            RecurringJob.AddOrUpdate("site-healthcheck-" + created.Id.ToString() , methodCall: () => _bgCheckService.CheckDownOrAlive(created), cronExpression: CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
+
             return RedirectToAction("Index");
         }
+
+        //to easy test sample apps.
+        public IActionResult CreateBulk()
+        {
+
+            var testData = new List<CreateTargetAppDto>
+            {
+                new CreateTargetAppDto {  Name = "google", Url = "https://www.google.com", LoggedInUserId = user.Id, IntervalType = IntervalType.Minutely, IntervalValue = 1 },
+                new CreateTargetAppDto {   Name = "twitter", Url = "https://www.twitter.com", LoggedInUserId = user.Id, IntervalType = IntervalType.Minutely, IntervalValue = 1 },
+                new CreateTargetAppDto {   Name = "facebook", Url = "https://www.facebook.com", LoggedInUserId = user.Id, IntervalType = IntervalType.Minutely, IntervalValue = 1 },
+                new CreateTargetAppDto {   Name = "http 500 test", Url = "https://httpstat.us/500", LoggedInUserId = user.Id, IntervalType = IntervalType.Minutely, IntervalValue = 1 }
+            };
+ 
+            foreach (var app in testData)
+            {
+                app.LoggedInUserId = user.Id;
+                var created = _healthCheckService.Add(app);
+                //RecurringJob.AddOrUpdate("site-healthcheck-" + created.Id.ToString(), methodCall: () => _bgCheckService.CheckDownOrAlive(created), cronExpression: CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
+            }
+           
+            return RedirectToAction("Index");
+        }
+
 
         public IActionResult Delete(int Id)
         {
@@ -103,9 +123,8 @@ namespace HealthCheck.Web.Controllers
         {
             app.LoggedInUserId = user.Id;
             var updated = _healthCheckService.Update(app);
-
-            RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
-
+             
+            //RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
             
             return RedirectToAction("Index");
 

@@ -26,8 +26,9 @@ namespace HealthCheck.Tests
                 IOptions<AppSettings> appsettings = new MockedAppSetting();
 
                 var userService = new UserService(db, appsettings);
-                var appService = new TargetAppService(db);
-                var mockBgService = new MockedBackgroundService(userService, appService);
+                var jobScheduler = new MockedSchedulerService();
+                var appService = new TargetAppService(db, jobScheduler);
+                var mockBgService = new MockedBackgroundService(db, userService);
 
                 var itemToCheck = appService.GetOneToCheck(1);
                 mockBgService.CheckDownOrAlive(itemToCheck);
@@ -52,8 +53,10 @@ namespace HealthCheck.Tests
                 var userService = new UserService(db, appsettings);
 
                 var curUser = userService.GetById(1); //Email Notification preference by mocked data
-                var appService = new TargetAppService(db);
-                var mockBgService = new MockedBackgroundService(userService, appService);
+                var jobScheduler = new MockedSchedulerService();
+                var appService = new TargetAppService(db, jobScheduler);
+
+                var mockBgService = new MockedBackgroundService(db, userService);
 
                 var itemToCheck = appService.GetOneToCheck(2, curUser.Id); //app 2 is down mocked
                 var checkUrlResult = mockBgService.CheckDownOrAlive(itemToCheck);
@@ -90,8 +93,11 @@ namespace HealthCheck.Tests
                 var userService = new UserService(db, appsettings);
 
                 var curUser = userService.GetById(1);
-                var appService = new TargetAppService(db);
-                var mockBgService = new MockedBackgroundService(userService, appService);
+
+                var jobScheduler = new MockedSchedulerService();
+                var appService = new TargetAppService(db, jobScheduler);
+
+                var mockBgService = new MockedBackgroundService(db, userService);
 
                 var itemToCheck = appService.GetOneToCheck(1, curUser.Id); //1 is alive mocked
                 var checkUrlResult = mockBgService.CheckDownOrAlive(itemToCheck);

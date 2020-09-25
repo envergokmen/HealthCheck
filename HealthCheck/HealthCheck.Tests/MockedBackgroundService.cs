@@ -1,4 +1,5 @@
-﻿using HealthCheck.Services;
+﻿using HealthCheck.Database;
+using HealthCheck.Services;
 using HealthCheck.Web;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ namespace HealthCheck.Tests
 {
     public class MockedBackgroundService : BgHealthCheckingService
     {
-        public MockedBackgroundService(IUserService userService, ITargetAppService targetAppService) : base(userService, targetAppService)
-        {
 
+        public MockedBackgroundService(HealthContext db, IUserService userService) : base(db, userService)
+        {
         }
 
         public override bool CheckIsAlive(string url)
