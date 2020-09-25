@@ -61,9 +61,9 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Create(CreateTargetAppDto app)
         {
 
-            if (!app.Url.IsValidUrl())
+            if (!ModelState.IsValid || !app.Url.IsValidUrl())
             {
-                ModelState.AddModelError(string.Empty, "Invalid Url Please Check");
+                ModelState.AddModelError(string.Empty, "Invalid Url or data please check");
                 return View(app);
             }
 
@@ -122,9 +122,9 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Update(UpdateTargetAppDto app)
         {
 
-            if (!app.Url.IsValidUrl())
+            if (!ModelState.IsValid || !app.Url.IsValidUrl())
             {
-                ModelState.AddModelError(string.Empty, "Invalid Url Please Check");
+                ModelState.AddModelError(string.Empty, "Invalid Url or data please check");
                 return View(app);
             }
 

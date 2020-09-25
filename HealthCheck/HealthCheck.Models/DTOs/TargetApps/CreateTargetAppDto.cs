@@ -11,7 +11,12 @@ namespace HealthCheck.Models.DTOs.TargetApps
         [Required]
         [StringLength(500)]
         public string Url { get; set; }
+
+        [Required]
         public IntervalType IntervalType { get; set; }
+
+        [Required]
+        [Range(1, 364)]
         public int IntervalValue { get; set; }
     }
 }
