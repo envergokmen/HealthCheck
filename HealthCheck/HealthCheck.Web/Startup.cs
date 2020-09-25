@@ -31,14 +31,11 @@ namespace HealthCheck.Web
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
             services.AddDbContext<HealthContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HealthDbCon")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMembershipService, MembershipService>();
             services.AddScoped<ITargetAppService, TargetAppService>();
@@ -46,7 +43,6 @@ namespace HealthCheck.Web
             services.AddScoped<IJobScheduler, JobScheduler>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
-
             services.Configure<AppSettings>(appSettingsSection);
             
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("HealthDbCon")));
@@ -72,7 +68,6 @@ namespace HealthCheck.Web
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -82,7 +77,6 @@ namespace HealthCheck.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
