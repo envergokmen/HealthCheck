@@ -23,13 +23,13 @@ namespace HealthCheck.Web.Controllers
     public class AppManagerController : HealthCheckBaseController
     {
         private readonly ILogger<AppManagerController> _logger;
-        private readonly ITargetAppService _healthCheckService;
+        private readonly ITargetAppService _targetAppService;
         private readonly IMembershipService _memeberShipService;
 
         public AppManagerController(ILogger<AppManagerController> logger, ITargetAppService healthCheckService, IMembershipService userService) : base(userService)
         {
             _logger = logger;
-            _healthCheckService = healthCheckService;
+            _targetAppService = healthCheckService;
             _memeberShipService = userService;
         }
 
@@ -37,7 +37,7 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Index()
         {
             AppManagerIndexVM model = new AppManagerIndexVM(user);
-            model.Apps = _healthCheckService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
+            model.Apps = _targetAppService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
 
             if (Request.IsAjaxRequest())
             {
@@ -52,7 +52,7 @@ namespace HealthCheck.Web.Controllers
             var user = _memeberShipService.GetUser();
           
             AppManagerIndexVM model = new AppManagerIndexVM(user);
-            model.Apps = _healthCheckService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
+            model.Apps = _targetAppService.All(new GetTargetAllAppDto { LoggedInUserId = user.Id });
 
             return PartialView("Index", model);
 
@@ -68,7 +68,7 @@ namespace HealthCheck.Web.Controllers
         {
 
             app.LoggedInUserId = user.Id;
-            var created = _healthCheckService.Add(app);
+            var created = _targetAppService.Add(app);
 
 
             return RedirectToAction("Index");
@@ -89,8 +89,7 @@ namespace HealthCheck.Web.Controllers
             foreach (var app in testData)
             {
                 app.LoggedInUserId = user.Id;
-                var created = _healthCheckService.Add(app);
-                //RecurringJob.AddOrUpdate("site-healthcheck-" + created.Id.ToString(), methodCall: () => _bgCheckService.CheckDownOrAlive(created), cronExpression: CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
+                _targetAppService.Add(app);
             }
            
             return RedirectToAction("Index");
@@ -100,7 +99,7 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Delete(int Id)
         {
            
-            _healthCheckService.Delete(new DeleteTargetAppDto { Id = Id, LoggedInUserId = user.Id });
+            _targetAppService.Delete(new DeleteTargetAppDto { Id = Id, LoggedInUserId = user.Id });
             RecurringJob.RemoveIfExists("site-healthcheck-" + Id.ToString());
 
             if (Request.IsAjaxRequest())
@@ -113,7 +112,7 @@ namespace HealthCheck.Web.Controllers
 
         public IActionResult Update(int Id)
         {
-            var model = _healthCheckService.GetOne(new GetOneTargetAppDto { Id = Id, LoggedInUserId = user.Id });
+            var model = _targetAppService.GetOne(new GetOneTargetAppDto { Id = Id, LoggedInUserId = user.Id });
 
             return View(model);
         }
@@ -122,7 +121,7 @@ namespace HealthCheck.Web.Controllers
         public IActionResult Update(UpdateTargetAppDto app)
         {
             app.LoggedInUserId = user.Id;
-            var updated = _healthCheckService.Update(app);
+            var updated = _targetAppService.Update(app);
              
             //RecurringJob.AddOrUpdate("site-healthcheck-" + updated.Id.ToString(), () => _bgCheckService.CheckDownOrAlive(updated), CronUtils.GetCronExpression(app.IntervalType, app.IntervalValue));
             

@@ -1,6 +1,7 @@
 ﻿using HealthCheck.Database;
 using HealthCheck.Models;
 using HealthCheck.Models.DTOs.TargetApps;
+using HealthCheck.Services.Utilities;
 using HealthCheck.Web;
 using System;
 using System.Collections.Generic;
@@ -22,31 +23,34 @@ namespace HealthCheck.Services
 
         public List<TargetAppDto> All(GetTargetAllAppDto request)
         {
-            return _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId).OrderByDescending(x => x.Id).Select(app => new TargetAppDto {  IntervalType=app.IntervalType, IntervalValue=app.IntervalValue, CreatedById=app.CreatedById, Id = app.Id, Url = app.Url, Name = app.Name, IsAlive = app.IsAlive, LastCheck = app.LastCheck }).ToList();
+            var apps= _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId).OrderByDescending(x => x.Id).ToList();
+            return Mapper.MapToAppDto(apps);
         }
 
         public UpdateTargetAppDto GetOne(GetOneTargetAppDto request)
         {
-            return _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId && c.Id == request.Id).Select(app => new UpdateTargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, IntervalType = app.IntervalType, IntervalValue = app.IntervalValue }).FirstOrDefault();
+            var app = _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId && c.Id == request.Id).FirstOrDefault();
+            return Mapper.MapToUpdateDto(app);
         }
 
         public TargetAppDto GetOneToCheck(int appId)
         {
-            return _db.TargetApps.Where(x=>x.Id==appId).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById=app.CreatedById, IntervalType= app.IntervalType, IntervalValue=app.IntervalValue, IsAlive=app.IsAlive }).FirstOrDefault();
+            var app= _db.TargetApps.Where(x=>x.Id==appId).FirstOrDefault();
+            return Mapper.MapToAppDto(app);
         }
 
         public TargetAppDto GetOneToCheck(int appId, int createdById)
         {
-            return _db.TargetApps.Where(x => x.Id == appId && x.CreatedById==createdById).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = app.CreatedById, IntervalType = app.IntervalType, IntervalValue = app.IntervalValue, IsAlive = app.IsAlive }).FirstOrDefault();
+            var app = _db.TargetApps.Where(x => x.Id == appId && x.CreatedById==createdById).FirstOrDefault();
+            return Mapper.MapToAppDto(app);
         }
 
         public TargetAppDto Add(CreateTargetAppDto registerDto)
         {
-            var app = new TargetApp { Name = registerDto.Name, Url = registerDto.Url, CreatedById = registerDto.LoggedInUserId, IntervalValue = registerDto.IntervalValue, IntervalType = registerDto.IntervalType };
+            var app = Mapper.MapToAppFromCreateDto(registerDto);
             _db.TargetApps.Add(app);
             _db.SaveChanges();
-            var created = new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = registerDto.LoggedInUserId, IntervalType = app.IntervalType, IntervalValue = app.IntervalValue, IsAlive = app.IsAlive, LastCheck = app.LastCheck };
-
+            var created = Mapper.MapToAppDto(app);
             _jobScheduler.AddOrUpdate(created);
 
             return created;
@@ -55,25 +59,16 @@ namespace HealthCheck.Services
         public TargetAppDto Update(UpdateTargetAppDto updateDto)
         {
             var app = _db.TargetApps.FirstOrDefault(c => c.Id == updateDto.Id && c.CreatedById == updateDto.LoggedInUserId);
-
-            app.Name = updateDto.Name;
-            app.Url = updateDto.Url;
-            app.IntervalType = updateDto.IntervalType;
-            app.IntervalValue = updateDto.IntervalValue;
-            app.IsAlive = null;
-
+            Mapper.SetPropsFromDto(app, updateDto);
             _db.SaveChanges();
-            var updated= new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById = updateDto.LoggedInUserId, IntervalType=app.IntervalType, IntervalValue=app.IntervalValue, IsAlive=app.IsAlive };
-
+            var updated = Mapper.MapToAppDto(app);
             _jobScheduler.AddOrUpdate(updated);
-
             return updated;
         }
 
         public bool Delete(DeleteTargetAppDto registerDto)
         {
             var app = _db.TargetApps.FirstOrDefault(c => c.Id == registerDto.Id);
-
             _db.TargetApps.Remove(app);
             _db.SaveChanges();
             _jobScheduler.RemoveIfExists(app.Id);

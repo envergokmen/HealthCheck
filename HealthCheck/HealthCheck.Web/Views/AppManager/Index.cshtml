@@ -3,6 +3,9 @@
 }
 @model HealthCheck.Models.DTOs.ViewModels.AppManagerIndexVM
 
+<div class="text-center mb-1">
+    Minumum wait is 1 minute, please create 1 minute schedule to the fastest result.
+</div>
 <div id="AppStatuses">
     <table class="table table-bordered table-striped w-100">
         <thead>
@@ -62,7 +65,7 @@
                     <tr id="NoApp">
                         <td colspan="6" class="text-center">
                             You don't have any apps <a asp-area="" asp-controller="AppManager" asp-action="Create">Add a Target App</a>
-                            Create sample apps   <a class="btn btn-sm btn-warning" asp-area="" asp-controller="AppManager" asp-action="CreateBulk">Add 4 Sample Target Apps</a>
+                            Create sample apps   <a class="btn btn-sm btn-warning" asp-area="" asp-controller="AppManager" asp-action="CreateBulk">Add 4 Sample Target Apps with 1 Min. Sch.</a>
                         </td>
                     </tr>
                 }

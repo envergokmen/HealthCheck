@@ -78,10 +78,6 @@ namespace HealthCheck.Web.Controllers
         public IActionResult ErrorTest()
         {
             _logger.LogError("test ErrorTest user");
-            //var b = 10;
-            //var c = 0;
-            //var x = b / c;
-
             return Content("OK");
         }
 

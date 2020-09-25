@@ -60,6 +60,8 @@ namespace HealthCheck.Web
         {
             var app = _db.TargetApps.FirstOrDefault(c => c.Id == checkStatus.Id);
 
+            if (app == null) return null;
+
             app.IsAlive = checkStatus.IsAlive;
             app.LastCheck = checkStatus.CheckDate;
 
@@ -81,13 +83,13 @@ namespace HealthCheck.Web
                 }
 
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
                 //could be not marked different http status errors like
                 return false;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //could be not marked different status like network error, timeout, etic.
                 return false;

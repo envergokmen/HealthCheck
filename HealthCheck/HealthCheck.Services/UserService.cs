@@ -24,12 +24,14 @@ namespace HealthCheck.Services
 
         public UserDto Login(UserLoginDto login)
         {
-            return _db.Users.Where(x => x.Username == login.Username && x.Password == SecurityUtils.Encrypt(login.Password, _appSettings.Secret)).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference }).FirstOrDefault();
+            var user= _db.Users.Where(x => x.Username == login.Username && x.Password == SecurityUtils.Encrypt(login.Password, _appSettings.Secret)).FirstOrDefault();
+            return Mapper.MapToUserDto(user);
         }
 
         public UserDto GetById(int Id)
         {
-            return _db.Users.Where(x => x.Id == Id).Select(x => new UserDto { Id = x.Id, UserName = x.Username, Name = x.Name, NotificationPreference = x.NotificationPreference, Email=x.Email, Gsm=x.Gsm }).FirstOrDefault();
+            var user= _db.Users.Where(x => x.Id == Id).FirstOrDefault();
+            return Mapper.MapToUserDto(user);
         }
 
         public NotificationType GetUserNotificationType(int Id)
@@ -40,14 +42,13 @@ namespace HealthCheck.Services
         public UserDto Register(UserRegisterDto registerDto)
         {
             var user = _db.Users.Where(x => x.Username == registerDto.Username).FirstOrDefault();
-
             if (user != null) { throw new Exception("This username in use"); };
 
-            user = new User { Email = registerDto.Email, Gsm = registerDto.Gsm, Username = registerDto.Username, Name = registerDto.Name, Password = SecurityUtils.Encrypt(registerDto.Password, _appSettings.Secret) };
+            user = Mapper.MapToUserFromRegister(registerDto, _appSettings.Secret);
             _db.Users.Add(user);
             _db.SaveChanges();
 
-            return new UserDto { Id = user.Id, UserName = user.Username, Name = user.Name, NotificationPreference = user.NotificationPreference };
+            return Mapper.MapToUserDto(user); 
 
         }
     }
