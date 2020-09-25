@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HealthCheck.Models.DTOs
+﻿namespace HealthCheck.Models.DTOs
 {
     public class AppSettings
     {

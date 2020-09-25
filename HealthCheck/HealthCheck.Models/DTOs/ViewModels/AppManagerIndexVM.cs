@@ -1,8 +1,6 @@
 ﻿using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Models.DTOs.User;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace HealthCheck.Models.DTOs.ViewModels
 {

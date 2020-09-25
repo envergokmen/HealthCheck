@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HealthCheck.Web.Models;
 using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Services;
 using HealthCheck.Web.Membership;
 using HealthCheck.Models.DTOs.ViewModels;
 using HealthCheck.Web.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using HealthCheck.Web.Filters;
 using Hangfire;
 using HealthCheck.Models;
-using HealthCheck.Services.Utilities;
 using HealthCheck.Services.Extensions;
 
 namespace HealthCheck.Web.Controllers

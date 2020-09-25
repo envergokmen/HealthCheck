@@ -1,12 +1,8 @@
-﻿using HealthCheck.Database;
-using HealthCheck.Models;
+﻿using HealthCheck.Models;
 using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Services;
-using HealthCheck.Web;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace HealthCheck.Tests
 {

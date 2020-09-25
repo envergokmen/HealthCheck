@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthCheck.Database;
 using HealthCheck.Models.DTOs.TargetApps;
 using HealthCheck.Services;

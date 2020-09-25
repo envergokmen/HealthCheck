@@ -1,9 +1,6 @@
 ﻿using HealthCheck.Database;
 using HealthCheck.Services;
 using HealthCheck.Web;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HealthCheck.Tests
 {

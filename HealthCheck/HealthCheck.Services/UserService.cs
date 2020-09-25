@@ -5,9 +5,7 @@ using HealthCheck.Models.DTOs.User;
 using HealthCheck.Services.Utilities;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace HealthCheck.Services
 {

@@ -1,13 +1,10 @@
 ﻿using HealthCheck.Database;
-using HealthCheck.Models;
 using HealthCheck.Models.DTOs;
 using HealthCheck.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace HealthCheck.Tests
 {
