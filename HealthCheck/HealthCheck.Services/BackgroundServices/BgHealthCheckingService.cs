@@ -82,13 +82,13 @@ namespace HealthCheck.Web
             }
             catch (HttpRequestException)
             {
-                //could be not marked different http status errors like
+                //could be marked different http status errors like
                 return false;
 
             }
             catch (Exception)
             {
-                //could be not marked different status like network error, timeout, etic.
+                //could be marked different status like network error, timeout, etic.
                 return false;
             }
         }
