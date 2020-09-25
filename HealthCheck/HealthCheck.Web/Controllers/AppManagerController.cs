@@ -16,6 +16,7 @@ using HealthCheck.Web.Filters;
 using Hangfire;
 using HealthCheck.Models;
 using HealthCheck.Services.Utilities;
+using HealthCheck.Services.Extensions;
 
 namespace HealthCheck.Web.Controllers
 {
