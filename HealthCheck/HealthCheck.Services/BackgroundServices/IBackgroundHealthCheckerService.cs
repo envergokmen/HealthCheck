@@ -4,6 +4,6 @@ namespace HealthCheck.Web
 {
     public interface IBackgroundHealthCheckerService
     {
-        void CheckDownOrAlive(TargetAppDto item);
+        AppCheckResultDto CheckDownOrAlive(TargetAppDto item);
     }
 }

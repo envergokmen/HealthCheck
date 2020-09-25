@@ -27,9 +27,9 @@ namespace HealthCheck.Services
             return _db.TargetApps.Where(c => c.CreatedById == request.LoggedInUserId && c.Id == request.Id).Select(app => new UpdateTargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, IntervalType = app.IntervalType, IntervalValue = app.IntervalValue }).FirstOrDefault();
         }
 
-        public UpdateTargetAppDto GetOneToCheck()
+        public TargetAppDto GetOneToCheck(int appId)
         {
-            return _db.TargetApps.OrderBy(x => x.LastCheck).Select(app => new UpdateTargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name }).FirstOrDefault();
+            return _db.TargetApps.Where(x=>x.Id==appId).Select(app => new TargetAppDto { Id = app.Id, Url = app.Url, Name = app.Name, CreatedById=app.CreatedById, IntervalType= app.IntervalType, IntervalValue=app.IntervalValue, IsAlive=app.IsAlive }).FirstOrDefault();
         }
 
         public TargetAppDto Add(CreateTargetAppDto registerDto)

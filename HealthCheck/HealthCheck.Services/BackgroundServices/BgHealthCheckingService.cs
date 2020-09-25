@@ -17,37 +17,44 @@ namespace HealthCheck.Web
         public readonly ITargetAppService _healthCheckService;
         public readonly IUserService _userService;
 
-        public BgHealthCheckingService(IUserService userService, ITargetAppService healthCheckService)
+        public BgHealthCheckingService(IUserService userService, ITargetAppService targetAppService)
         {
-            _healthCheckService = healthCheckService;
+            _healthCheckService = targetAppService;
             _userService = userService;
         }
 
-        public void CheckDownOrAlive(TargetAppDto item)
+        public AppCheckResultDto CheckDownOrAlive(TargetAppDto item)
         {
-            if (item == null) return;
+            if (item == null) return null;
+            AppCheckResultDto result = new AppCheckResultDto();
 
+            //left on purpos in order to track
             Debug.WriteLine($"Processing {item.Id}  -  {item.Name} url : {item.Url}");
 
-            var isAlive = CheckIsAlive(item.Url);
-            NotifyUser(item, isAlive);
-            _healthCheckService.MarkAsChecked(new UpdateChecksStatusDto { CheckDate = DateTime.Now, IsAlive = isAlive, Id = item.Id });
+            result.IsAlive = CheckIsAlive(item.Url);
+            NotifyUser(item, result);
+
+            _healthCheckService.MarkAsChecked(new UpdateChecksStatusDto { CheckDate = DateTime.Now, IsAlive = result.IsAlive, Id = item.Id });
+
+            return result;
 
         }
 
-        private void NotifyUser(TargetAppDto item, bool isAlive)
+        private void NotifyUser(TargetAppDto item, AppCheckResultDto result)
         {
-            if (!isAlive)
+            if (!result.IsAlive)
             {
                 var user = _userService.GetById(item.CreatedById.GetValueOrDefault(0));
-                if (user == null || String.IsNullOrWhiteSpace(user.Email)) return;
+                if (user == null) return;
 
                 var notificationService = NotificationServiceFactory.GetNotificationService(user.NotificationPreference);
                 notificationService.NotifyDown(user, item);
+                result.NotifiedVia = user.NotificationPreference;
+                result.IsUserNotified = true;
             }
         }
 
-        private static bool CheckIsAlive(string url)
+        public virtual bool CheckIsAlive(string url)
         {
             using (var httpClient = new HttpClient())
             {

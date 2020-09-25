@@ -17,7 +17,7 @@ namespace HealthCheck.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-            builder.UseSqlServer(@"Server=DESKTOP-UP8JB10;Database=HealthCheckDB;user id=sa; password=123456;MultipleActiveResultSets=true");
+            //builder.UseSqlServer(@"Server=DESKTOP-UP8JB10;Database=HealthCheckDB;user id=sa; password=123456;MultipleActiveResultSets=true");
         }
 
         public DbSet<User> Users { get; set; }

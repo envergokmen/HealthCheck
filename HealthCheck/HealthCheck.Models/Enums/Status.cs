@@ -24,7 +24,7 @@ namespace HealthCheck.Models
     public enum NotificationType
     {
         Email=0,
-        Gsm=1
+        Sms=1
     }
 
     public enum IntervalType

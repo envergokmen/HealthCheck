@@ -9,7 +9,7 @@ namespace HealthCheck.Services
         List<TargetAppDto> All(GetTargetAllAppDto request);
         bool Delete(DeleteTargetAppDto registerDto);
         UpdateTargetAppDto GetOne(GetOneTargetAppDto request);
-        UpdateTargetAppDto GetOneToCheck();
+        TargetAppDto GetOneToCheck(int appId);
         TargetAppDto MarkAsChecked(UpdateChecksStatusDto checkStatus);
         TargetAppDto Update(UpdateTargetAppDto updateDto);
     }

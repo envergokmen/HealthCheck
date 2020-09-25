@@ -15,6 +15,7 @@ namespace HealthCheck.Services.NotificationServices
 
     public class EmailNotificationService : INotificationService
     {
+
         public void NotifyDown(UserDto user, TargetAppDto targetApp)
         {
             //send email

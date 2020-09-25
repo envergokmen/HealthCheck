@@ -13,7 +13,7 @@ namespace HealthCheck.Services.NotificationServices
             {
                 case NotificationType.Email:
                     return new EmailNotificationService();
-                case NotificationType.Gsm:
+                case NotificationType.Sms:
                     return new EmailNotificationService();
                 default:
                  return new EmailNotificationService();
