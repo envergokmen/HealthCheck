@@ -29,13 +29,13 @@ namespace HealthCheck.Services.NotificationServices
                     Text = $" App {targetApp.Name} is down Id : {targetApp.Id} - url {targetApp.Url}"
                 };
 
-                smtpClient.Connect("smtp.yandex.com", 465, true);
-                smtpClient.Authenticate("checkhealth@yandex.com", "Hlt135!");
+                //smtpClient.Connect("smtp.yandex.com", 465, true);
+                //smtpClient.Authenticate("checkhealth@yandex.com", "Hlt135!");
                 
                 //message is get rejected because of spam policy, I just wanted to show the implementation
-                //smtpClient.Send(message);
+                //smtpClient.Send(messagse);
 
-                smtpClient.Disconnect(true);
+                //smtpClient.Disconnect(true);
             }
         }
 
